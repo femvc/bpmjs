@@ -136,27 +136,6 @@ http.createServer(function (req, res) {
 
         });
     }
-    else if (url === '/package') {
-        fs.readFile('./packlist.txt', function (err, data) {
-            if (err) throw err;
-            var jsonObj = JSON.parse(data + '}');
-            console.log(jsonObj);
-
-            var html = ['<h1>Package list</h1><ul>'];
-            var tpl = '<li><b>#{0}:</b> YES</li>';
-            for (var i in jsonObj) {
-                if (i && jsonObj[i]) {
-                    html.push(bpm.util.format(tpl, i));
-                }
-            }
-
-            res.writeHead(200, {
-                'content-type': 'text/html'
-            });
-            res.end(html.join('\n'));
-
-        });
-    }
     else if ((url + '?').indexOf('/unpublish?') === 0) {
         var mod_name = String(url.split('?mod_name=')[1]).toLowerCase();
         var tarball_path = path.resolve('tarball/' + mod_name + '.tar.gz');
@@ -326,18 +305,29 @@ http.createServer(function (req, res) {
     else if ((url + '??').indexOf('/css??') === 0) {
         merge.css(req, res);
     }
+    //  if (url === '/package')
     else {
-        res.writeHead(200, {
-            'content-type': 'text/html'
+        fs.readFile('./packlist.txt', function (err, data) {
+            if (err) throw err;
+            var jsonObj = JSON.parse(data + '}');
+            console.log(jsonObj);
+
+            var html = ['<h1>Package list</h1><ul>'];
+            var tpl = '<li><b>#{0}:</b> YES</li>';
+            for (var i in jsonObj) {
+                if (i && jsonObj[i]) {
+                    html.push(bpm.util.format(tpl, i));
+                }
+            }
+
+            res.writeHead(200, {
+                'content-type': 'text/html'
+            });
+            res.end(html.join('\n'));
+
         });
-        res.end(
-            '<form action="/upload" enctype="multipart/form-data" ' +
-            'method="post">' +
-            '<input type="file" name="upload" multiple="multiple"><br>' +
-            '<input type="submit" value="Upload">' +
-            '</form>'
-        );
     }
+
 }).listen(80);
 
 console.log('Server is listen at http://localhost:80');
