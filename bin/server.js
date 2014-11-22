@@ -80,7 +80,7 @@ http.createServer(function (req, res) {
 
         var cb = function () {
             var mod_src = path.resolve(
-                process.cwd() + '/tarball/' + String(mod_name).replace('.tar.gz', '') + '.tar.gz');
+                __dirname + '/tarball/' + String(mod_name).replace('.tar.gz', '') + '.tar.gz');
 
             fs.exists(mod_src, function (exists) {
                 if (!exists) {
@@ -110,7 +110,7 @@ http.createServer(function (req, res) {
 
         if (!version) {
             version = '0.0.0.tar.gz';
-            fs.readdir(path.resolve(process.cwd() + '/tarball'), function (error, files) {
+            fs.readdir(path.resolve(__dirname + '/tarball'), function (error, files) {
                 for (var i in files) {
                     str = files[i].split('@');
                     if (str[0] === name && bpm.util.versionCompare(str[1], version)) {
@@ -138,10 +138,10 @@ http.createServer(function (req, res) {
     }
     else if ((url + '?').indexOf('/unpublish?') === 0) {
         var mod_name = String(url.split('?mod_name=')[1]).toLowerCase();
-        var tarball_path = path.resolve('tarball/' + mod_name + '.tar.gz');
+        var tarball_path = path.resolve(__dirname + '/tarball/' + mod_name + '.tar.gz');
         fs.exists(tarball_path, function (exists) {
             if (exists) {
-                fs.appendFile(path.resolve('./packlist.txt'), '\r\n,"' + mod_name + '": false', function (err) {
+                fs.appendFile(path.resolve(__dirname + '/packlist.txt'), '\r\n,"' + mod_name + '": false', function (err) {
                     if (err) throw err;
                     fs.rename(
                         tarball_path,
@@ -149,7 +149,7 @@ http.createServer(function (req, res) {
                         function (err) {
                             if (err) throw err;
                             exec('cd ' + process.cwd(), function (err, out) {
-                                exec('rm -rf ' + path.resolve(process.cwd() + '/hui_modules/' + mod_name), function (err, out) {
+                                exec('rm -rf ' + path.resolve(__dirname + '/hui_modules/' + mod_name), function (err, out) {
                                     var msg = 'unpublish ' + mod_name + ' success.';
                                     console.log(msg);
                                     res.writeHead(200, {
@@ -191,7 +191,7 @@ http.createServer(function (req, res) {
                 return;
             }
 
-            fs.readFile(path.resolve('./packlist.txt'), function (err, data) {
+            fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
                 if (err) throw err;
                 jsonObj = JSON.parse(data + '}');
                 mod_name = bpm.util.encode(String(String(pkgjson.name).toLowerCase() + '@' + pkgjson.version).toLowerCase());
@@ -208,7 +208,7 @@ http.createServer(function (req, res) {
                     res.writeHead(200, {
                         'hui_mod': 'success'
                     });
-                    fs.appendFile(path.resolve('./packlist.txt'), '\r\n,"' + mod_name + '": ' + JSON.stringify(pkgjson), function (err) {
+                    fs.appendFile(path.resolve(__dirname + '/packlist.txt'), '\r\n,"' + mod_name + '": ' + JSON.stringify(pkgjson), function (err) {
                         if (err) throw err;
                         msg = '';
                         console.log(msg);
@@ -221,7 +221,7 @@ http.createServer(function (req, res) {
                                 'path': path.resolve(files.tarball.path)
                             })
                             .pipe(fstream.Writer({
-                                'path': path.resolve(process.cwd() + '/tarball/' + mod_name + '.tar.gz')
+                                'path': path.resolve(__dirname + '/tarball/' + mod_name + '.tar.gz')
                             }))
                             .on('close', function () {
                                 // extract tarball
@@ -232,7 +232,7 @@ http.createServer(function (req, res) {
                                     })
                                     .pipe(zlib.Gunzip())
                                     .pipe(tar.Extract({
-                                        path: path.resolve(process.cwd() + '/hui_modules/' + mod_name),
+                                        path: path.resolve(__dirname + '/hui_modules/' + mod_name),
                                         strip: 1
                                     }))
                                     .on('end', function () {
@@ -240,7 +240,7 @@ http.createServer(function (req, res) {
                                         // delete tmp file
                                         fs.unlink(filePath);
 
-                                        var pwd = path.resolve(process.cwd() + '/hui_modules/' + mod_name);
+                                        var pwd = path.resolve(__dirname + '/hui_modules/' + mod_name);
                                         listDir(pwd);
 
                                         console.log('publish success.');
@@ -307,7 +307,7 @@ http.createServer(function (req, res) {
     }
     //  if (url === '/package')
     else {
-        fs.readFile(path.resolve('./packlist.txt'), function (err, data) {
+        fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
             if (err) throw err;
             var jsonObj = JSON.parse(data + '}');
 
