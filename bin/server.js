@@ -141,7 +141,7 @@ http.createServer(function (req, res) {
         var tarball_path = path.resolve('tarball/' + mod_name + '.tar.gz');
         fs.exists(tarball_path, function (exists) {
             if (exists) {
-                fs.appendFile('./packlist.txt', '\r\n,"' + mod_name + '": false', function (err) {
+                fs.appendFile(path.resolve('./packlist.txt'), '\r\n,"' + mod_name + '": false', function (err) {
                     if (err) throw err;
                     fs.rename(
                         tarball_path,
@@ -191,7 +191,7 @@ http.createServer(function (req, res) {
                 return;
             }
 
-            fs.readFile('./packlist.txt', function (err, data) {
+            fs.readFile(path.resolve('./packlist.txt'), function (err, data) {
                 if (err) throw err;
                 jsonObj = JSON.parse(data + '}');
                 mod_name = bpm.util.encode(String(String(pkgjson.name).toLowerCase() + '@' + pkgjson.version).toLowerCase());
@@ -208,7 +208,7 @@ http.createServer(function (req, res) {
                     res.writeHead(200, {
                         'hui_mod': 'success'
                     });
-                    fs.appendFile('./packlist.txt', '\r\n,"' + mod_name + '": ' + JSON.stringify(pkgjson), function (err) {
+                    fs.appendFile(path.resolve('./packlist.txt'), '\r\n,"' + mod_name + '": ' + JSON.stringify(pkgjson), function (err) {
                         if (err) throw err;
                         msg = '';
                         console.log(msg);
@@ -307,7 +307,7 @@ http.createServer(function (req, res) {
     }
     //  if (url === '/package')
     else {
-        fs.readFile('./packlist.txt', function (err, data) {
+        fs.readFile(path.resolve('./packlist.txt'), function (err, data) {
             if (err) throw err;
             var jsonObj = JSON.parse(data + '}');
 
