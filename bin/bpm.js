@@ -285,8 +285,8 @@ bpm.unpublish = function (mod_name) {
     }
     var cb = function (mod_name) {
         var options = {
-            host: '127.0.0.1',
-            port: 8200,
+            host: 'bpmjs.org',
+            port: 80,
             'path': '/unpublish?mod_name=' + mod_name
         };
 
@@ -344,8 +344,8 @@ bpm.upload = function () {
         form.append('tarball', fs.createReadStream(filePath));
 
         form.submit({
-            host: 'localhost',
-            port: '8200',
+            host: 'bpmjs.org',
+            port: '80',
             path: '/publish'
         }, function (err, res) {
             // console.log(res.statusCode);
@@ -441,8 +441,8 @@ bpm.uninstall = function (mod_name, cb) {
 
 bpm.getModDepend = function (mod_dep, cb) {
     var options = {
-        host: '127.0.0.1',
-        port: 8200,
+        host: 'bpmjs.org',
+        port: 80,
         'path': '/get_dep??' + mod_dep
     };
 
@@ -460,8 +460,8 @@ bpm.getModDepend = function (mod_dep, cb) {
 
 bpm.download = function (mod_name, cb) {
     var options = {
-        host: '127.0.0.1',
-        port: 8200,
+        host: 'bpmjs.org',
+        port: 80,
         'path': '/download?mod_name=' + mod_name
     };
 
