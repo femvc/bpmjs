@@ -310,7 +310,6 @@ http.createServer(function (req, res) {
         fs.readFile('./packlist.txt', function (err, data) {
             if (err) throw err;
             var jsonObj = JSON.parse(data + '}');
-            console.log(jsonObj);
 
             var html = ['<h1>Package list</h1><ul>'];
             var tpl = '<li><b>#{0}:</b> YES</li>';
