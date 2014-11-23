@@ -69,7 +69,7 @@ http.createServer(function (req, res) {
             req.query[str[0]] = str[1];
         }
     }
-    res.setHeader('content-type', 'text/html;charset=utf8');
+    res.setHeader('content-type', 'text/javascript;charset=utf8');
 
     req.query.file = ((String(req.url) + '??').split('??')[1] + '?').replace(/\s/g, '').split('?')[0];
 
