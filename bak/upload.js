@@ -4,11 +4,11 @@ var formData = require('form-data');
 
 var form = new formData();
 
-form.append('upload', fs.createReadStream(__dirname + '/dir/1.txt'));
+form.append('upload', fs.createReadStream(__dirname + '/dir/2.txt'));
 
 form.submit({
-    host: 'localhost',
-    port: '8200',
+    host: 'bpmjs.org',
+    port: '80',
     path: '/upload'
 }, function (err, res) {
     console.log(res.statusCode);

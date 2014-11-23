@@ -11,7 +11,7 @@ http.createServer(function (req, res) {
         var form = new formidable.IncomingForm();
         form.uploadDir = 'dir';
         form.parse(req, function (err, fields, files) {
-            if (files && files.upload) {
+            if (files && files.upload && 'png,txt'.indexOf(files.upload.name.split('.').pop()) > -1) {
                 fstream.Reader({
                     'path': path.resolve(files.upload.path)
                 })
@@ -21,7 +21,8 @@ http.createServer(function (req, res) {
                     .on('close', function () {
                         // delete tmp file
                         fs.unlink(path.resolve(files.upload.path));
-                        res.end(' uploaded');
+                        console.log(files.upload.name + ' uploaded.');
+                        res.end(files.upload.name + ' uploaded.');
                     });
             }
             else {
@@ -42,6 +43,6 @@ http.createServer(function (req, res) {
             '</form>'
         );
     }
-}).listen(8300);
+}).listen(80);
 
-console.log('Server is listen at http://localhost:8200');
+console.log('Server is listen at http://localhost:80');
