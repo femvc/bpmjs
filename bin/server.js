@@ -259,20 +259,20 @@ http.createServer(function (req, res) {
         });
         return;
     }
-    else if (url === '/post') {
-        res.writeHead(200, {
-            'content-type': 'text/html'
-        });
-        res.end(
-            '<form action="/publish" enctype="multipart/form-data" ' +
-            'method="post">' +
-            '<input type="text" name="fname" value="sdsdasd"><br>' +
-            '<input type="file" name="tarball" multiple="multiple"><br>' +
-            '<input type="submit" value="Publish">' +
-            '</form>'
-        );
+    // else if (url === '/post') {
+    //     res.writeHead(200, {
+    //         'content-type': 'text/html'
+    //     });
+    //     res.end(
+    //         '<form action="/publish" enctype="multipart/form-data" ' +
+    //         'method="post">' +
+    //         '<input type="text" name="fname" value="sdsdasd"><br>' +
+    //         '<input type="file" name="tarball" multiple="multiple"><br>' +
+    //         '<input type="submit" value="Publish">' +
+    //         '</form>'
+    //     );
 
-    }
+    // }
     else if ((url + '??').indexOf('/hui_modules??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var m = req.query.file.split('@')[0];
