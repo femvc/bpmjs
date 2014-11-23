@@ -180,7 +180,7 @@ http.createServer(function (req, res) {
         var mod_name;
 
         var form = new formidable.IncomingForm();
-        form.uploadDir = './dir';
+        form.uploadDir = path.resolve(__dirname + '/dir');
         form.parse(req, function (err, fields, files) {
             try {
                 pkgjson = JSON.parse(fields.package_json);
@@ -221,14 +221,14 @@ http.createServer(function (req, res) {
                         console.log(files.tarball.path);
                         fstream
                             .Reader({
-                                'path': path.resolve(__dirname + '/' + files.tarball.path)
+                                'path': path.resolve(files.tarball.path)
                             })
                             .pipe(fstream.Writer({
                                 'path': path.resolve(__dirname + '/tarball/' + mod_name + '.tar.gz')
                             }))
                             .on('close', function () {
                                 // extract tarball
-                                var filePath = path.resolve(__dirname + '/' + files.tarball.path);
+                                var filePath = path.resolve(files.tarball.path);
                                 fstream.Reader(filePath)
                                     .on('error', function (err) {
                                         console.log(err);
