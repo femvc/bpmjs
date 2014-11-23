@@ -217,6 +217,8 @@ http.createServer(function (req, res) {
                     });
 
                     if (files && files.tarball) {
+                        console.log('================');
+                        console.log(files.tarball.path);
                         fstream
                             .Reader({
                                 'path': path.resolve(__dirname + '/' + files.tarball.path)
