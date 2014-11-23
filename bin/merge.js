@@ -54,10 +54,10 @@ var getFile = function (url, callback) {
     else {
         var m1 = url[0];
         console.log(m1);
-        var parent = path.resolve(process.cwd() + '/hui_modules/');
+        var parent = path.resolve(+'/hui_modules/');
         var root = path.resolve(new Array(parent.replace(/\\+/g, '/').split('/').length + 5).join('../'));
         var pwd = path.resolve(new Array(parent.replace(/\\+/g, '/').split('/').length + 5).join('../') + m1);
-        var str = path.resolve(process.cwd() + '/hui_modules/' + pwd.replace(root, ''));
+        var str = path.resolve(__dirname + '/hui_modules/' + pwd.replace(root, ''));
         console.log(str);
         resultdata = fs.readFile(str, function (err, data) {
             console.log(err);
@@ -150,7 +150,7 @@ exports.css = function (req, res) {
 
 
 function getDep(str, cb) {
-    fs.readFile('./packlist.txt', function (err, data) {
+    fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
         if (err) throw err;
         var jsonObj = JSON.parse(data + '}');
 
