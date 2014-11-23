@@ -11,7 +11,7 @@ http.createServer(function (req, res) {
         var form = new formidable.IncomingForm();
         form.uploadDir = 'dir';
         form.parse(req, function (err, fields, files) {
-            if (files && files.upload && 'png,txt'.indexOf(files.upload.name.split('.').pop()) > -1) {
+            if (files && files.upload) {
                 fstream.Reader({
                     'path': path.resolve(files.upload.path)
                 })
