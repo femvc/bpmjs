@@ -54,7 +54,7 @@ var getFile = function (url, callback) {
     else {
         var m1 = url[0];
         console.log(m1);
-        var parent = path.resolve(+'/hui_modules/');
+        var parent = path.resolve(__dirname + '/hui_modules/');
         var root = path.resolve(new Array(parent.replace(/\\+/g, '/').split('/').length + 5).join('../'));
         var pwd = path.resolve(new Array(parent.replace(/\\+/g, '/').split('/').length + 5).join('../') + m1);
         var str = path.resolve(__dirname + '/hui_modules/' + pwd.replace(root, ''));
