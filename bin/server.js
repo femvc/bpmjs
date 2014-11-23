@@ -219,14 +219,14 @@ http.createServer(function (req, res) {
                     if (files && files.tarball) {
                         fstream
                             .Reader({
-                                'path': path.resolve(files.tarball.path)
+                                'path': path.resolve(__dirname + '/' + files.tarball.path)
                             })
                             .pipe(fstream.Writer({
                                 'path': path.resolve(__dirname + '/tarball/' + mod_name + '.tar.gz')
                             }))
                             .on('close', function () {
                                 // extract tarball
-                                var filePath = path.resolve(files.tarball.path);
+                                var filePath = path.resolve(__dirname + '/' + files.tarball.path);
                                 fstream.Reader(filePath)
                                     .on('error', function (err) {
                                         console.log(err);
