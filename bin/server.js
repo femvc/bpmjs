@@ -278,36 +278,39 @@ http.createServer(function (req, res) {
     // }
     else if ((url + '??').indexOf('/bpm_api/hui_modules??') === 0) {
         merge.getDep(req.query.file, function (result) {
-            var m = req.query.file.split('@')[0];
-            if (result[m]) {
-                req.url = '/bpm_api/js??' + result[m].name + '@' + result[m].version + '/' +
-                    result[m].main;
-                merge.js(req, res);
+            var i = req.query.file.split('@')[0];
+            if (result[i]) {
+                // req.url = '/bpm_api/js??' + result[m].name + '@' + result[m].version + '/' + result[m].main;
+                // merge.js(req, res);
+                res.redirect('/js??' + result[i].name + '@' + result[i].version + '/' +
+                    (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js'));
             }
             else {
                 res.end('//Not exist.');
             }
         });
     }
-    else if ((url + '??').indexOf('/bpm_api/js??') === 0) {
-        merge.js(req, res);
-    }
+    // else if ((url + '??').indexOf('/bpm_api/js??') === 0) {
+    //     merge.js(req, res);
+    // }
     else if ((url + '??').indexOf('/bpm_api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var str = [];
             for (var i in result) {
                 if (result[i]) {
-                    str.push(result[i].name + '@' + result[i].version + '/' + result[i].main);
+                    str.push(result[i].name + '@' + result[i].version + '/' +
+                        (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js'));
                 }
             }
-            req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
-            console.log(req.url);
-            merge.js(req, res);
+            // req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
+            // console.log(req.url);
+            // merge.js(req, res);
+            res.redirect('/js??' + str.join(',') + '?' + url.split('?').pop());
         });
     }
-    else if ((url + '??').indexOf('/bpm_api/css??') === 0) {
-        merge.css(req, res);
-    }
+    // else if ((url + '??').indexOf('/bpm_api/css??') === 0) {
+    //     merge.css(req, res);
+    // }
     //  if (url === '/bpm_api/package')
     else {
         fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
