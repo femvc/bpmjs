@@ -284,7 +284,7 @@ http.createServer(function (req, res) {
                 // merge.js(req, res);
                 var toUrl = '//bpmjs.org/js/??' + result[i].name + '@' + result[i].version + '/' +
                     (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
-                res.writeHead(302, {
+                res.writeHead(301, {
                     'Location': toUrl
                 });
                 res.end();
@@ -318,7 +318,7 @@ http.createServer(function (req, res) {
             // console.log(req.url);
             // merge.js(req, res);
             var toUrl = '//bpmjs.org/js/??' + str.join(',') + '?' + url.split('?').pop();
-            res.writeHead(302, {
+            res.writeHead(301, {
                 'Location': toUrl
             });
             res.end();
