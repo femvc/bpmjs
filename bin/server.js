@@ -73,7 +73,7 @@ http.createServer(function (req, res) {
 
     req.query.file = ((String(req.url) + '??').split('??')[1] + '?').replace(/\s/g, '').split('?')[0];
 
-    if ((url + '?').indexOf('/download?') === 0) {
+    if ((url + '?').indexOf('/bpm_api/download?') === 0) {
         var mod_name = String(url.split('?mod_name=')[1]).toLowerCase();
         str = mod_name.split('@');
         var name = str[0];
@@ -127,7 +127,7 @@ http.createServer(function (req, res) {
             cb();
         }
     }
-    else if ((url + '?').indexOf('/get_dep??') === 0) {
+    else if ((url + '?').indexOf('/bpm_api/get_dep??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var html = JSON.stringify(result);
             res.writeHead(200, {
@@ -137,7 +137,7 @@ http.createServer(function (req, res) {
 
         });
     }
-    else if ((url + '?').indexOf('/unpublish?') === 0) {
+    else if ((url + '?').indexOf('/bpm_api/unpublish?') === 0) {
         var mod_name = String(url.split('?mod_name=')[1]).toLowerCase();
         var tarball_path = path.resolve(__dirname + '/tarball/' + mod_name + '.tar.gz');
         fs.exists(tarball_path, function (exists) {
@@ -174,7 +174,7 @@ http.createServer(function (req, res) {
             }
         });
     }
-    else if (url === '/publish') {
+    else if (url === '/bpm_api/publish') {
         var pkgjson;
         var jsonObj;
         var mod_name;
@@ -262,7 +262,7 @@ http.createServer(function (req, res) {
         });
         return;
     }
-    // else if (url === '/post') {
+    // else if (url === '/bpm_api/post') {
     //     res.writeHead(200, {
     //         'content-type': 'text/html'
     //     });
@@ -276,11 +276,11 @@ http.createServer(function (req, res) {
     //     );
 
     // }
-    else if ((url + '??').indexOf('/hui_modules??') === 0) {
+    else if ((url + '??').indexOf('/bpm_api/hui_modules??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var m = req.query.file.split('@')[0];
             if (result[m]) {
-                req.url = '/js??' + result[m].name + '@' + result[m].version + '/' +
+                req.url = '/bpm_api/js??' + result[m].name + '@' + result[m].version + '/' +
                     result[m].main;
                 merge.js(req, res);
             }
@@ -289,10 +289,10 @@ http.createServer(function (req, res) {
             }
         });
     }
-    else if ((url + '??').indexOf('/js??') === 0) {
+    else if ((url + '??').indexOf('/bpm_api/js??') === 0) {
         merge.js(req, res);
     }
-    else if ((url + '??').indexOf('/combo??') === 0) {
+    else if ((url + '??').indexOf('/bpm_api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var str = [];
             for (var i in result) {
@@ -300,15 +300,15 @@ http.createServer(function (req, res) {
                     str.push(result[i].name + '@' + result[i].version + '/' + result[i].main);
                 }
             }
-            req.url = '/combo??' + str.join(',') + '?' + url.split('?').pop();
+            req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
             console.log(req.url);
             merge.js(req, res);
         });
     }
-    else if ((url + '??').indexOf('/css??') === 0) {
+    else if ((url + '??').indexOf('/bpm_api/css??') === 0) {
         merge.css(req, res);
     }
-    //  if (url === '/package')
+    //  if (url === '/bpm_api/package')
     else {
         fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
             if (err) throw err;

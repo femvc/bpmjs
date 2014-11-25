@@ -68,7 +68,7 @@ bpm.pkgjson = {
             // 'license', 'ISC',
             'dependencies', {
                 'hui': '*'
-                //,'hui_control': '*'
+                    //,'hui_control': '*'
             },
             'author', 'haiyang5210'
         ];
@@ -287,7 +287,7 @@ bpm.unpublish = function (mod_name) {
         var options = {
             host: 'bpmjs.org',
             port: 80,
-            'path': '/unpublish?mod_name=' + mod_name
+            'path': '/bpm_api/unpublish?mod_name=' + mod_name
         };
 
         http.get(options, function (res) {
@@ -315,10 +315,10 @@ bpm.pack = function (cb) {
         var filePath = path.resolve(process.cwd() + '/' + pkgjson.name + '_' + md5.digest('hex') + '.tar.gz');
 
         fstreamIgnore({
-            'path': process.cwd(),
-            'type': 'Directory',
-            ignoreFiles: ['.gitignore']
-        })
+                'path': process.cwd(),
+                'type': 'Directory',
+                ignoreFiles: ['.gitignore']
+            })
             .pipe(tar.Pack())
             .pipe(zlib.Gzip())
             .pipe(fstream.Writer({
@@ -346,7 +346,7 @@ bpm.upload = function () {
         form.submit({
             host: 'bpmjs.org',
             port: '80',
-            path: '/publish'
+            path: '/bpm_api/publish'
         }, function (err, res) {
             // console.log(res.statusCode);
             // console.log(res.headers.hui_mod);
@@ -443,7 +443,7 @@ bpm.getModDepend = function (mod_dep, cb) {
     var options = {
         host: 'bpmjs.org',
         port: 80,
-        'path': '/get_dep??' + mod_dep
+        'path': '/bpm_api/get_dep??' + mod_dep
     };
 
     http.get(options, function (res) {
@@ -462,7 +462,7 @@ bpm.download = function (mod_name, cb) {
     var options = {
         host: 'bpmjs.org',
         port: 80,
-        'path': '/download?mod_name=' + mod_name
+        'path': '/bpm_api/download?mod_name=' + mod_name
     };
 
     http.get(options, function (res) {
