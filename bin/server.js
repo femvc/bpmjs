@@ -282,8 +282,12 @@ http.createServer(function (req, res) {
             if (result[i]) {
                 // req.url = '/bpm_api/js??' + result[m].name + '@' + result[m].version + '/' + result[m].main;
                 // merge.js(req, res);
-                res.redirect('/js??' + result[i].name + '@' + result[i].version + '/' +
-                    (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js'));
+                var toUrl = '/js??' + result[i].name + '@' + result[i].version + '/' +
+                    (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
+                res.writeHead(301, {
+                    'Location': toUrl
+                });
+                res.end();
             }
             else {
                 res.end('//Not exist.');
@@ -305,7 +309,11 @@ http.createServer(function (req, res) {
             // req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
             // console.log(req.url);
             // merge.js(req, res);
-            res.redirect('/js??' + str.join(',') + '?' + url.split('?').pop());
+            var toUrl = '/js??' + str.join(',') + '?' + url.split('?').pop();
+            res.writeHead(301, {
+                'Location': toUrl
+            });
+            res.end();
         });
     }
     // else if ((url + '??').indexOf('/bpm_api/css??') === 0) {
