@@ -284,7 +284,7 @@ http.createServer(function (req, res) {
                 // merge.js(req, res);
                 var toUrl = '//bpmjs.org/js/??' + result[i].name + '@' + result[i].version + '/' +
                     (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
-                res.writeHead(301, {
+                res.writeHead(302, {
                     'Location': toUrl
                 });
                 res.end();
@@ -299,18 +299,26 @@ http.createServer(function (req, res) {
     // }
     else if ((url + '??').indexOf('/bpm_api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
-            var str = [];
+            var str = [],
+                m;
             for (var i in result) {
                 if (result[i]) {
-                    str.push(result[i].name + '@' + result[i].version + '/' +
-                        (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js'));
+                    m = result[i].name + '@' + result[i].version + '/' + (req.query.debug ?
+                        result[i].main :
+                        result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
+                    if (String(result[i].name).split('@')[0] !== 'hui') {
+                        str.push(m);
+                    }
+                    else {
+                        str.unshift(m);
+                    }
                 }
             }
             // req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
             // console.log(req.url);
             // merge.js(req, res);
             var toUrl = '//bpmjs.org/js/??' + str.join(',') + '?' + url.split('?').pop();
-            res.writeHead(301, {
+            res.writeHead(302, {
                 'Location': toUrl
             });
             res.end();
