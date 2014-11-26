@@ -309,7 +309,7 @@ http.createServer(function (req, res) {
                         result[i].main :
                         result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
                     mod_name = String(result[i].name).split('@')[0];
-                    if (not.indexOf() === -1) {
+                    if (not.indexOf(mod_name) === -1) {
                         if (mod_name !== 'hui') {
                             str.push(mod);
                         }
