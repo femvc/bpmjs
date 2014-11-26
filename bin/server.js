@@ -300,17 +300,22 @@ http.createServer(function (req, res) {
     else if ((url + '??').indexOf('/bpm_api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var str = [],
-                m;
+                not = (req.query.not || '').split(','),
+                mod,
+                mod_name;
             for (var i in result) {
                 if (result[i]) {
-                    m = result[i].name + '@' + result[i].version + '/' + (req.query.debug ?
+                    mod = result[i].name + '@' + result[i].version + '/' + (req.query.debug ?
                         result[i].main :
                         result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
-                    if (String(result[i].name).split('@')[0] !== 'hui') {
-                        str.push(m);
-                    }
-                    else {
-                        str.unshift(m);
+                    mod_name = String(result[i].name).split('@')[0];
+                    if (not.indexOf() === -1) {
+                        if (mod_name !== 'hui') {
+                            str.push(mod);
+                        }
+                        else {
+                            str.unshift(mod);
+                        }
                     }
                 }
             }
