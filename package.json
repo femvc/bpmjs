@@ -1,10 +1,10 @@
 {
   "name": "bpmjs",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Browser package management",
   "preferGlobal": "true",
   "bin": {
-    "bpm": "bin\\bpm.js"
+    "bpm": "bin/bpm.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

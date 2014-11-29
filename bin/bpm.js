@@ -68,7 +68,7 @@ bpm.pkgjson = {
             // 'license', 'ISC',
             'dependencies', {
                 'hui': '*'
-                //,'hui_control': '*'
+                    //,'hui_control': '*'
             },
             'author', 'haiyang5210'
         ];
@@ -315,10 +315,10 @@ bpm.pack = function (cb) {
         var filePath = path.resolve(process.cwd() + '/' + pkgjson.name + '_' + md5.digest('hex') + '.tar.gz');
 
         fstreamIgnore({
-            'path': process.cwd(),
-            'type': 'Directory',
-            ignoreFiles: ['.gitignore']
-        })
+                'path': process.cwd(),
+                'type': 'Directory',
+                ignoreFiles: ['.gitignore']
+            })
             .pipe(tar.Pack())
             .pipe(zlib.Gzip())
             .pipe(fstream.Writer({
