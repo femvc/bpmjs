@@ -339,10 +339,10 @@ http.createServer(function (req, res) {
             var jsonObj = JSON.parse(data + '}');
 
             var html = ['<h1>Package list</h1><ul>'];
-            var tpl = '<li><b>#{0}:</b> YES</li>';
+            var tpl = '<li><b>#{0}:</b> #{1} YES</li>';
             for (var i in jsonObj) {
                 if (i && jsonObj[i]) {
-                    html.push(bpm.util.format(tpl, i));
+                    html.push(bpm.util.format(tpl, i, jsonObj[i].author));
                 }
             }
 
