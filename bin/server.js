@@ -322,11 +322,16 @@ http.createServer(function (req, res) {
             // req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
             // console.log(req.url);
             // merge.js(req, res);
-            var toUrl = '//bpmjs.org/js/??' + str.join(',') + '?' + url.split('?').pop();
-            res.writeHead(301, {
-                'Location': toUrl
-            });
-            res.end();
+            if (str.length) {
+                var toUrl = '//bpmjs.org/js/??' + str.join(',') + '?' + url.split('?').pop();
+                res.writeHead(301, {
+                    'Location': toUrl
+                });
+                res.end();
+            }
+            else {
+                res.end('// None');
+            }
         });
     }
     // else if ((url + '??').indexOf('/bpm_api/css??') === 0) {
