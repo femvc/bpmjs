@@ -323,7 +323,8 @@ http.createServer(function (req, res) {
             // console.log(req.url);
             // merge.js(req, res);
             if (str.length) {
-                var toUrl = '//bpmjs.org/js/??' + str.join(',') + '?' + url.split('?').pop();
+                var toUrl = '//bpmjs.org/js/??' + str.join(',') +
+                    (url.split('?').length > 1 ? '?' + url.split('?').pop());
                 res.writeHead(301, {
                     'Location': toUrl
                 });
