@@ -199,6 +199,11 @@ function getDep(str, cb) {
 
             list = list.concat(result);
         }
+
+        if (!all_dep['hui']) {
+            all_dep['hui'] = lastVersion['hui'];
+        }
+
         if (cb) {
             cb(all_dep);
         }

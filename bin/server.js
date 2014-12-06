@@ -300,7 +300,7 @@ http.createServer(function (req, res) {
     else if ((url + '??').indexOf('/bpm_api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var str = [],
-                not = (req.query.not || '').split(','),
+                not = (req.query.n || '').split(','),
                 mod,
                 mod_name;
             for (var i in result) {
