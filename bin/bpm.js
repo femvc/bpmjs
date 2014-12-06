@@ -60,15 +60,15 @@ bpm.pkgjson = {
         me.pkgjson = [
             'name', path.basename(path.dirname(me.pkgjson_src)),
             'version', '0.0.1',
-            'description', 'This is "#{0}".',
-            'main', '#{0}.js',
+            'description', 'This module is used to build "#{name}".',
+            'main', '#{name}.js',
             // 'test', 'echo "Error: no test specified" && exit 1',
             // 'repository', 'git|http://github.com/' + basename,
             // 'keywords', 'javascript|node',
             // 'license', 'ISC',
             'dependencies', {
                 'hui': '*'
-                    //,'hui_control': '*'
+                //,'hui_control': '*'
             },
             'author', 'haiyang5210'
         ];
@@ -118,13 +118,17 @@ bpm.pkgjson = {
         var k = me.pkgjson[me.promptPkgjson.index],
             v = me.pkgdata[k];
         if (k === 'description') {
-            v = bpm.util.format(v, me.pkgdata['name']);
+            v = bpm.util.format(v, {
+                name: me.pkgdata['name']
+            });
         }
         if (k === 'dependencies') {
             v = JSON.stringify(me.pkgdata['dependencies']);
         }
         else if (k === 'main') {
-            v = bpm.util.format(v, String(me.pkgdata['name']).toLowerCase());
+            v = bpm.util.format(v, {
+                name: String(me.pkgdata['name']).toLowerCase()
+            });
         }
         me.rl.question(k + ': ' + (!!v ? '(' + v + ') ' : ''), function (answer) {
             me.pkgdata[me.pkgjson[me.promptPkgjson.index]] = answer || v;
@@ -184,7 +188,7 @@ bpm.pkgjson = {
             '<head>',
             '<meta charset="UTF-8">',
             '<title>Demo - #{Name}</title>',
-            '<script src="http://bpmjs.org/bpm_api/combo??hui?debug=y"></script>',
+            '<script src="http://bpmjs.org/bpm_api/combo"></script>',
             '<script src="#{name}.js"></script>',
             '</head>',
             '<body>',
@@ -192,11 +196,9 @@ bpm.pkgjson = {
             '    <div id="a"></div>',
             '',
             '    <script type="text/javascript">',
-            '        hui.define.autoload = true;',
-            '        hui.define(\'\', [\'#{name}\'], function () {',
+            '        hui.require([\'#{name}\'], function () {',
             '            // init ',
-            '            var a = document.getElementById(\'a\');',
-            '            a.innerHTML = \' ok\';',
+            '            document.getElementById(\'a\').innerHTML = \'#{Name} ok\';',
             //'            hui.Control.create(a);',
             '        });',
             '    </script>',
@@ -315,10 +317,10 @@ bpm.pack = function (cb) {
         var filePath = path.resolve(process.cwd() + '/' + pkgjson.name + '_' + md5.digest('hex') + '.tar.gz');
 
         fstreamIgnore({
-                'path': process.cwd(),
-                'type': 'Directory',
-                ignoreFiles: ['.gitignore']
-            })
+            'path': process.cwd(),
+            'type': 'Directory',
+            ignoreFiles: ['.gitignore']
+        })
             .pipe(tar.Pack())
             .pipe(zlib.Gzip())
             .pipe(fstream.Writer({
