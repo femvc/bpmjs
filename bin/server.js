@@ -322,9 +322,9 @@ http.createServer(function (req, res) {
             // req.url = '/bpm_api/combo??' + str.join(',') + '?' + url.split('?').pop();
             // console.log(req.url);
             // merge.js(req, res);
+            var param = (url + '???').split('??')[1].split('?').pop();
             if (str.length) {
-                var toUrl = '//bpmjs.org/js/??' + str.join(',') +
-                    (url.split('?').length > 1 ? '?' + url.split('?').pop());
+                var toUrl = '//bpmjs.org/js/??' + str.join(',') + (param ? '?' + param : '');
                 res.writeHead(301, {
                     'Location': toUrl
                 });
