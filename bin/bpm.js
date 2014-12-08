@@ -188,7 +188,7 @@ bpm.pkgjson = {
             '<head>',
             '<meta charset="UTF-8">',
             '<title>Demo - #{Name}</title>',
-            '<script src="http://bpmjs.org/bpm_api/combo"></script>',
+            '<script src="http://bpmjs.org/api/combo"></script>',
             '<script src="#{name}.js"></script>',
             '</head>',
             '<body>',
@@ -289,7 +289,7 @@ bpm.unpublish = function (mod_name) {
         var options = {
             host: 'bpmjs.org',
             port: 80,
-            'path': '/bpm_api/unpublish?mod_name=' + mod_name
+            'path': '/api/unpublish?mod_name=' + mod_name
         };
 
         http.get(options, function (res) {
@@ -348,7 +348,7 @@ bpm.upload = function () {
         form.submit({
             host: 'bpmjs.org',
             port: '80',
-            path: '/bpm_api/publish'
+            path: '/api/publish'
         }, function (err, res) {
             // console.log(res.statusCode);
             // console.log(res.headers.hui_mod);
@@ -445,7 +445,7 @@ bpm.getModDepend = function (mod_dep, cb) {
     var options = {
         host: 'bpmjs.org',
         port: 80,
-        'path': '/bpm_api/get_dep??' + mod_dep
+        'path': '/api/get_dep??' + mod_dep
     };
 
     http.get(options, function (res) {
@@ -464,7 +464,7 @@ bpm.download = function (mod_name, cb) {
     var options = {
         host: 'bpmjs.org',
         port: 80,
-        'path': '/bpm_api/download?mod_name=' + mod_name
+        'path': '/api/download?mod_name=' + mod_name
     };
 
     http.get(options, function (res) {
