@@ -12,6 +12,8 @@ bpm.util = require('./bpm_util').util;
 
 var merge = require('./merge');
 
+var concat = require('./concat');
+
 var tar = require('tar');
 var zlib = require('zlib');
 
@@ -71,7 +73,7 @@ http.createServer(function (req, res) {
     }
     res.setHeader('content-type', 'text/javascript;charset=utf8');
 
-    req.query.file = ((String(req.url) + '??').split('??')[1] + '?').replace(/\s/g, '').split('?')[0];
+    // req.query.file = ((String(req.url) + '??').split('??')[1] + '?').replace(/\s/g, '').split('?')[0];
 
     if ((url + '?').indexOf('/api/download?') === 0) {
         var mod_name = String(url.split('?mod_name=')[1]).toLowerCase();
@@ -297,6 +299,15 @@ http.createServer(function (req, res) {
     // else if ((url + '??').indexOf('/api/js/??') === 0) {
     //     merge.js(req, res);
     // }
+    else if ((url + '?').indexOf('/api/index?') === 0) {
+        concat.index(req, res);
+    }
+    else if ((url + '?').indexOf('/api/js?') === 0) {
+        concat.js(req, res);
+    }
+    else if ((url + '?').indexOf('/api/css?') === 0) {
+        concat.css(req, res);
+    }
     else if ((url + '??').indexOf('/api/combo??') === 0) {
         merge.getDep(req.query.file, function (result) {
             var str = [],
@@ -324,11 +335,13 @@ http.createServer(function (req, res) {
             // merge.js(req, res);
             var param = (url + '???').split('??')[1].split('?').pop();
             if (str.length) {
-                var toUrl = '//bpmjs.org/js/??' + str.join(',') + (param ? '?' + param : '');
+                /*var toUrl = '//bpmjs.org/js/??' + str.join(',') + (param ? '?' + param : '');
                 res.writeHead(301, {
                     'Location': toUrl
                 });
-                res.end();
+                res.end();*/
+                req.query.file = (str.length ? 'hui_modules/' : '') + str.join(',hui_modules/');
+                concat.js(req, res);
             }
             else {
                 res.end('// None');
