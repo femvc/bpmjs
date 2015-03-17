@@ -57,14 +57,17 @@ function listDir(loc) {
 
 http.createServer(function (req, res) {
     var url = String(req.url);
-    console.log(url);
-    var msg;
+    var msg, str = url, list;
 
     req.query = req.query || {};
-    var list = url.split('?');
+    if (url.indexOf('??') > -1) {
+        str = url.split('??')[1];
+        req.query.file = str.substring(0, str.indexOf('?'));
+    }
+
+    list = str.split('?');
     list.shift();
     list = list.join('&').replace(/\&+/g, '&').split('&');
-    var str;
     for (var i = 0, len = list.length; i < len; i++) {
         str = list[i].split('=');
         if (str[0]) {
@@ -328,6 +331,9 @@ http.createServer(function (req, res) {
                             str.unshift(mod);
                         }
                     }
+                }
+                else if (result[i] === undefined) {
+                    // Todo: mod not exist!
                 }
             }
             // req.url = '/api/combo??' + str.join(',') + '?' + url.split('?').pop();

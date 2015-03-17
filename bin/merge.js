@@ -158,6 +158,7 @@ function getDep(str, cb) {
         var list = [];
         str = str || '';
         // {"hui": "*", "hui_control": "*"}
+
         if (str && str.indexOf('{') === 0) {
             var mod_dep = JSON.parse(String(decodeURIComponent(str)).toLowerCase());
             for (var i in mod_dep) {
