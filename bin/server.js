@@ -10,8 +10,6 @@ var http = require('http');
 var bpm = {};
 bpm.util = require('./bpm_util').util;
 
-var merge = require('./merge');
-
 var concat = require('./concat');
 
 var tar = require('tar');
@@ -57,12 +55,13 @@ function listDir(loc) {
 
 http.createServer(function (req, res) {
     var url = String(req.url);
-    var msg, str = url, list;
+    var msg, str = url,
+        list;
 
     req.query = req.query || {};
     if (url.indexOf('??') > -1) {
         str = url.split('??')[1];
-        req.query.file = str.substring(0, str.indexOf('?'));
+        req.query.file = str.split('?')[0];
     }
 
     list = str.split('?');
@@ -133,7 +132,7 @@ http.createServer(function (req, res) {
         }
     }
     else if ((url + '?').indexOf('/api/get_dep??') === 0) {
-        merge.getDep(req.query.file, function (result) {
+        concat.getDep(req.query.file, function (result) {
             var html = JSON.stringify(result);
             res.writeHead(200, {
                 'content-type': 'text/html'
@@ -282,11 +281,11 @@ http.createServer(function (req, res) {
 
     // }
     else if ((url + '??').indexOf('/api/hui_modules??') === 0) {
-        merge.getDep(req.query.file, function (result) {
+        concat.getDep(req.query.file, function (result) {
             var i = req.query.file.split('@')[0];
             if (result[i]) {
                 // req.url = '/api/js/??' + result[m].name + '@' + result[m].version + '/' + result[m].main;
-                // merge.js(req, res);
+                // concat.js(req, res);
                 var toUrl = '//bpmjs.org/js/??' + result[i].name + '@' + result[i].version + '/' +
                     (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
                 res.writeHead(301, {
@@ -300,7 +299,7 @@ http.createServer(function (req, res) {
         });
     }
     // else if ((url + '??').indexOf('/api/js/??') === 0) {
-    //     merge.js(req, res);
+    //     concat.js(req, res);
     // }
     else if ((url + '?').indexOf('/api/index?') === 0) {
         concat.index(req, res);
@@ -312,7 +311,7 @@ http.createServer(function (req, res) {
         concat.css(req, res);
     }
     else if ((url + '??').indexOf('/api/combo??') === 0) {
-        merge.getDep(req.query.file, function (result) {
+        concat.getDep(req.query.file, function (result) {
             var str = [],
                 not = (req.query.n || '').split(','),
                 mod,
@@ -338,7 +337,7 @@ http.createServer(function (req, res) {
             }
             // req.url = '/api/combo??' + str.join(',') + '?' + url.split('?').pop();
             // console.log(req.url);
-            // merge.js(req, res);
+            // concat.js(req, res);
             var param = (url + '???').split('??')[1].split('?').pop();
             if (str.length) {
                 /*var toUrl = '//bpmjs.org/js/??' + str.join(',') + (param ? '?' + param : '');
@@ -355,7 +354,7 @@ http.createServer(function (req, res) {
         });
     }
     // else if ((url + '??').indexOf('/api/css??') === 0) {
-    //     merge.css(req, res);
+    //     concat.css(req, res);
     // }
     //  if (url === '/api/package')
     else {

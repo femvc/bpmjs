@@ -1,10 +1,10 @@
+'use strict';
 /*
  * GET home page.
  */
 var http = require('http'),
     fs = require('fs'),
     path = require('path'),
-    url = require('url'),
     crypto = require('crypto'),
     iconv = require('iconv-lite'),
     UglifyJS = require('uglify-js'),
@@ -13,11 +13,14 @@ var http = require('http'),
     }),
     BufferHelper = require('bufferhelper');
 
+var bpm = {};
+bpm.util = require('./bpm_util').util;
+
 //压缩js
 var minify = function (code) {
     return UglifyJS.minify(code, {
         fromString: true
-    })
+    });
 };
 //压缩css
 var minicss = function (source) {
@@ -27,7 +30,7 @@ var minicss = function (source) {
 //设置页面header
 var setHeader = function (res) {
     var date = new Date();
-    
+
     if (!res.getHeader('Accept-Ranges')) res.setHeader('Accept-Ranges', 'bytes');
     if (!res.getHeader('ETag')) res.setHeader('ETag', date.valueOf());
     if (!res.getHeader('Date')) res.setHeader('Date', date.toUTCString());
@@ -53,9 +56,10 @@ var getFilePath = function (filename) {
 //按照url获取文件内容
 var getFile = function (url, callback) {
     var resultdata = '';
+    // url = url.replace(/\.\.\//g, '').replace(/\.\//g, '').split('|');
     url = url.split('|');
-    if (url[0].indexOf('http') == 0) {
-        var req = http.get(url[0], function (p_res) {
+    if (url[0].indexOf('http') === 0) {
+        http.get(url[0], function (p_res) {
             var bfHelper = new BufferHelper();
             if (p_res.statusCode != 404) {
                 p_res.on('data', function (chunk) {
@@ -94,8 +98,8 @@ var mergeFile = function (query, type, callback) {
     var fsArray = query.file.split(',');
     var files = [],
         num = 0;
-    for (file in fsArray) {
-        if (query.host && fsArray[file].indexOf('http') != 0) {
+    for (var file in fsArray) {
+        if (query.host && fsArray[file].indexOf('http') !== 0) {
             fsArray[file] = query.host + fsArray[file];
         }
         getFile(fsArray[file], function (text) {
@@ -109,10 +113,12 @@ var mergeFile = function (query, type, callback) {
         })
     }
 };
+
+//输出内容
 //输出内容
 var writeContent = function (req, res, type) {
     res.setHeader('Charset', 'utf-8');
-    res.setHeader('Content-Type',  (type === 'js' ? 'application/javascript;charset=UTF-8' : type === 'css' ? 'text/css;charset=UTF-8' : 'text/plain;charset=UTF-8'));
+    res.setHeader('Content-Type', (type === 'js' ? 'application/javascript;charset=UTF-8' : type === 'css' ? 'text/css;charset=UTF-8' : 'text/plain;charset=UTF-8'));
     if (!req.query || !req.query.file) {
         res.end('concat abort');
         console.log(req.query);
@@ -182,11 +188,78 @@ exports.index = function (req, res) {
 
 exports.js = function (req, res) {
     writeContent(req, res, 'js');
-}
+};
+
 exports.css = function (req, res) {
     writeContent(req, res, 'css');
 };
 
+
+function getDep(str, cb) {
+    fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
+        if (err) throw err;
+        var jsonObj = JSON.parse(data + '}');
+
+        //todo
+        var list = [];
+        str = str || '';
+        // {"hui": "*", "hui_control": "*"}
+
+        if (str && str.indexOf('{') === 0) {
+            var mod_dep = JSON.parse(String(decodeURIComponent(str)).toLowerCase());
+            for (var i in mod_dep) {
+                list.push(i + '@' + mod_dep[i]);
+            }
+        }
+        else {
+            list = str.split(',');
+        }
+
+        var lastVersion = {};
+        for (var i in jsonObj) {
+            var d = jsonObj[i];
+            var m = lastVersion[d.name];
+            if (!m || bpm.util.versionCompare(d.version, m.version)) {
+                lastVersion[d.name] = d;
+            }
+        }
+
+        var all_dep = {};
+        var result = [];
+
+        while (list.length) {
+            var mod = list.pop();
+            var result = [];
+            var name = mod.split('@')[0];
+            var version = (mod + '@*').split('@')[1];
+            var m = version === '' || version === '*' ? lastVersion[name] : jsonObj[mod];
+
+            all_dep[name] = m;
+
+            if (m && m.dependencies) {
+                for (var i in m.dependencies) {
+                    if (!all_dep[i]) {
+                        result.push(i + '@' + m.dependencies[i]);
+                    }
+                }
+                list = list.concat(result);
+            }
+
+            
+        }
+
+        if (!all_dep['hui']) {
+            all_dep['hui'] = lastVersion['hui'];
+        }
+
+        if (cb) {
+            cb(all_dep);
+        }
+        else return all_dep;
+    });
+}
+
+exports.getDep = getDep;
 
 //http://localhost:3000/js?file=http://x.libdd.com/farm1/a05baa/fde6509f/jquery.mousewheel-3.0.6.pack.js,http://x.libdd.com/farm1/08871e/95134743/jquery.fancybox-buttons.js
 //http://localhost:3000/css?file=http://s.libdd.com/css/base/dd.$7205.css,http://s.libdd.com/css/app/tagpro.$7164.css

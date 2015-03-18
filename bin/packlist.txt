@@ -2,7 +2,7 @@
 ,"hui_control@0.0.1":{"name":"hui_control","version":"0.0.1","description":"This is \"hui_control\".","main":"hui_control.js","dependencies":{"hui":"*"},"author":"haiyang5210"}
 ,"hui_template@0.0.1":{"name":"hui_template","version":"0.0.1","description":"This is \"hui_template\".","main":"hui_template.js","author":"haiyang5210"}
 ,"hui_action@0.0.1":{"name":"hui_action","version":"0.0.1","description":"This is \"hui_action\".","main":"hui_action.js","dependencies":{"hui":"*","hui_control":"*","hui_template":"*"},"author":"haiyang5210"}
-,"hui_util@0.0.1":{"name":"hui_util","version":"0.0.1","description":"This is \"hui_util\".","main":"hui_util.js","dependencies":"{\"hui\": \"*\"}","author":"haiyang5210"}
+,"hui_util@0.0.1":{"name":"hui_util","version":"0.0.1","description":"This is \"hui_util\".","main":"hui_util.js","dependencies":{"hui": "*"},"author":"haiyang5210"}
 ,"hui_table@0.0.1":{"name":"hui_table","version":"0.0.1","description":"This is \"hui_table\".","main":"hui_table.js","dependencies":{"hui":"*","hui_control":"*","hui_util":"*"},"author":"haiyang5210"}
 ,"hui_textinput@0.0.1":{"name":"hui_textinput","version":"0.0.1","description":"This is \"hui_textinput\".","main":"hui_textinput.js","dependencies":{"hui":"*","hui_util":"*"},"author":"haiyang5210"}
 ,"hui_validator@0.0.1":{"name":"hui_validator","version":"0.0.1","description":"This is \"hui_validator\".","main":"hui_validator.js","dependencies":{"hui":"*","hui_util":"*"},"author":"haiyang5210"}
