@@ -1,13 +1,13 @@
 /* jshint strict: false */
-//   __  __   __  __    _____   ______   ______   __  __   _____     
-//  /\ \/\ \ /\ \/\ \  /\___ \ /\__  _\ /\  _  \ /\ \/\ \ /\  __`\   
-//  \ \ \_\ \\ \ \ \ \ \/__/\ \\/_/\ \/ \ \ \/\ \\ \ `\\ \\ \ \ \_\  
-//   \ \  _  \\ \ \ \ \   _\ \ \  \ \ \  \ \  __ \\ \ . ` \\ \ \ =__ 
-//    \ \ \ \ \\ \ \_\ \ /\ \_\ \  \_\ \__\ \ \/\ \\ \ \`\ \\ \ \_\ \
-//     \ \_\ \_\\ \_____\\ \____/  /\_____\\ \_\ \_\\ \_\ \_\\ \____/
-//      \/_/\/_/ \/_____/ \/___/   \/_____/ \/_/\/_/ \/_/\/_/ \/___/ 
+//   __    __           ______   ______  _____    __  __     
+//  /\ \  /\ \ /'\_/`\ /\  _  \ /\__  _\/\  __`\ /\ \/\ \    
+//  \ `\`\\/'//\      \\ \ \/\ \\/_/\ \/\ \ \/\ \\ \ \ \ \   
+//   `\ `\ /' \ \ \__\ \\ \  __ \  \ \ \ \ \ \ \ \\ \ \ \ \  
+//     `\ \ \  \ \ \_/\ \\ \ \/\ \  \ \ \ \ \ \_\ \\ \ \_\ \ 
+//       \ \_\  \ \_\\ \_\\ \_\ \_\  \ \_\ \ \_____\\ \_____\
+//        \/_/   \/_/ \/_/ \/_/\/_/   \/_/  \/_____/ \/_____/
 //                                                                   
-//                                                                   
+
 /**
  * @name HUI是一个富客户端应用的前端MVC框架
  * @public
@@ -25,28 +25,28 @@ hui.runWithoutStrict = function (key, data) {
 // hui.require('./module')
 hui.require = function (n, conf) {
     // conf is {source:'hjfile.com'} or callback function
-    if (!n || typeof n != 'string') return;
-    if (typeof conf == 'function') {
-        conf = {
-            callback: conf
-        };
+    if (n && Object.prototype.toString.call(n) === '[object Array]') {
+        hui.define('', n, conf);
     }
-    if (!hui.require.checkLoaded(n, conf)) {
-        hui.require.loaded.push(n);
-        var src = hui.require.parseModuleUrl(n, conf, 'js');
-        var script = document.createElement('script');
-        script.src = src + (~src.indexOf('?') ? '&' : '?') + 'random=' + String(Math.random()).substr(5, 4);
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }
-    else {
-        var mod = hui.define.getModule(n);
-        if (mod) {
-            hui.define.loadModulesLeft(mod);
+    else if (n && typeof n === 'string') {
+        if (!hui.require.checkLoaded(n, conf)) {
+            hui.require.loaded.push(n);
+            var src = hui.require.parseModuleUrl(n, conf, 'js');
+            var script = document.createElement('script');
+            script.src = src + (~src.indexOf('?') ? '&' : '?') + 'random=' + String(Math.random()).substr(5, 4);
+            document.getElementsByTagName('head')[0].appendChild(script);
+        }
+        else {
+            var mod = hui.define.getModule(n);
+            if (mod) {
+                hui.define.loadModulesLeft(mod);
+            }
+        }
+        if (conf) {
+            hui.define('', [n], conf);
         }
     }
-    if (conf && conf.callback) {
-        hui.define('', [n], conf.callback);
-    }
+
 };
 hui.require.loaded = [];
 hui.require.checkLoaded = function (n, conf) {
