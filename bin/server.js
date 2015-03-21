@@ -52,7 +52,6 @@ function listDir(loc) {
     });
 }
 
-
 http.createServer(function (req, res) {
     var url = String(req.url);
     var msg, str = url,
@@ -131,7 +130,7 @@ http.createServer(function (req, res) {
             cb();
         }
     }
-    else if ((url + '?').indexOf('/api/get_dep??') === 0) {
+    else if ((url + '?').indexOf('/api/dep??') === 0 || (url + '?').indexOf('/api/get_dep??') === 0) {
         concat.getDep(req.query.file, function (result) {
             var html = JSON.stringify(result);
             res.writeHead(200, {
@@ -266,20 +265,6 @@ http.createServer(function (req, res) {
         });
         return;
     }
-    // else if (url === '/api/post') {
-    //     res.writeHead(200, {
-    //         'content-type': 'text/html'
-    //     });
-    //     res.end(
-    //         '<form action="/publish" enctype="multipart/form-data" ' +
-    //         'method="post">' +
-    //         '<input type="text" name="fname" value="sdsdasd"><br>' +
-    //         '<input type="file" name="tarball" multiple="multiple"><br>' +
-    //         '<input type="submit" value="Publish">' +
-    //         '</form>'
-    //     );
-
-    // }
     else if ((url + '??').indexOf('/api/hui_modules??') === 0) {
         concat.getDep(req.query.file, function (result) {
             var i = req.query.file.split('@')[0];
@@ -298,9 +283,6 @@ http.createServer(function (req, res) {
             }
         });
     }
-    // else if ((url + '??').indexOf('/api/js/??') === 0) {
-    //     concat.js(req, res);
-    // }
     else if ((url + '?').indexOf('/api/index?') === 0) {
         concat.index(req, res);
     }
@@ -335,16 +317,8 @@ http.createServer(function (req, res) {
                     // Todo: mod not exist!
                 }
             }
-            // req.url = '/api/combo??' + str.join(',') + '?' + url.split('?').pop();
-            // console.log(req.url);
-            // concat.js(req, res);
             var param = (url + '???').split('??')[1].split('?').pop();
             if (str.length) {
-                /*var toUrl = '//bpmjs.org/js/??' + str.join(',') + (param ? '?' + param : '');
-                res.writeHead(301, {
-                    'Location': toUrl
-                });
-                res.end();*/
                 req.query.file = (str.length ? 'hui_modules/' : '') + str.join(',hui_modules/');
                 concat.js(req, res);
             }
@@ -353,10 +327,6 @@ http.createServer(function (req, res) {
             }
         });
     }
-    // else if ((url + '??').indexOf('/api/css??') === 0) {
-    //     concat.css(req, res);
-    // }
-    //  if (url === '/api/package')
     else {
         fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
             if (err) throw err;

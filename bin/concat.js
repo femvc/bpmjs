@@ -98,23 +98,23 @@ var mergeFile = function (query, type, callback) {
     var fsArray = query.file.split(',');
     var files = [],
         num = 0;
+    var cb = function (text) {
+        num++;
+        files = files.concat([text]);
+        if (num === fsArray.length) {
+            callback(String(query.debug) !== 'undefined' ? files.join('\n') :
+                (type == 'js' ? minify(files.join('')).code :
+                    minicss(files.join(''))));
+        }
+    };
     for (var file in fsArray) {
         if (query.host && fsArray[file].indexOf('http') !== 0) {
             fsArray[file] = query.host + fsArray[file];
         }
-        getFile(fsArray[file], function (text) {
-            num++;
-            files = files.concat([text]);
-            if (num == fsArray.length) {
-                callback(String(query.debug) !== 'undefined' ? files.join('\n') :
-                    (type == 'js' ? minify(files.join('')).code :
-                        minicss(files.join(''))));
-            }
-        })
+        getFile(fsArray[file], cb);
     }
 };
 
-//输出内容
 //输出内容
 var writeContent = function (req, res, type) {
     res.setHeader('Charset', 'utf-8');
