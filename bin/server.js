@@ -300,9 +300,7 @@ http.createServer(function (req, res) {
                 mod_name;
             for (var i in result) {
                 if (result[i]) {
-                    mod = result[i].name + '@' + result[i].version + '/' + (req.query.debug ?
-                        result[i].main :
-                        result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
+                    mod = result[i].name + '@' + result[i].version + '/' + result[i].main;
                     mod_name = String(result[i].name).split('@')[0];
                     if (not.indexOf(mod_name) === -1) {
                         if (mod_name !== 'hui') {
