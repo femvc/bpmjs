@@ -5,6 +5,6 @@ bpm publish
 bpm install control
 bpm install action
 
-bpm init -> package.json
+bpm init -> package.json 
 
 
